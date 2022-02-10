@@ -21,7 +21,7 @@ The Fortran package [Vicsek_macro](https://github.com/smotsch/Vicsek_macro) is a
 This package can be installed globally using the Julia package manager by typing
 
 ```julia
-] add ...
+] add https://github.com/antoinediez/SOH.jl.git
 ```
 
 Alternatively, it is also possible to clone the GitHub repository and to run a simulation as explained in the example script ``example.jl``. 
@@ -64,7 +64,7 @@ The implementation is based on the methodology introduced by [2]. When V=0, the 
 <div align=center>
 ∂ₜρ + c₁∇ₓ⋅(ρΩ) = 0            
 
-ɛ(∂ₜ(ρΩ) + c₂∇_x⋅(ρΩ⊗Ω) + λ∇ₓρ) = ρ(1-|Ω|²)Ω,
+ɛ(∂ₜ(ρΩ) + c₂∇ₓ⋅(ρΩ⊗Ω) + λ∇ₓρ) = ρ(1-|Ω|²)Ω,
 </div>
 
 
