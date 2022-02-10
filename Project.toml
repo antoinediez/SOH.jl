@@ -2,3 +2,12 @@ name = "SOH"
 uuid = "334b9e08-ccd1-46f4-945f-bd1e0a39677b"
 authors = ["Antoine Diez <antoine.n.diez@gmail.com>"]
 version = "0.1.0"
+
+[deps]
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+HCubature = "19dc6840-f33b-545b-b366-655c7e3ffd49"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
+QuadGK = "1fd47b50-473d-5c70-9696-f719f8f3bcdc"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
