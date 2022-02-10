@@ -37,7 +37,7 @@ and further developed in [1]. This model is based on an alignment mechanism whic
 The SOH partial differential equations system reads 
 
 <div align=center>
-<h style="font-size:18px">
+<h style="font-size:48px">
 ∂ₜρ + c₁∇ₓ⋅(ρΩ) = 0           
 
 ρ(∂ₜΩ + c₂(Ω⋅∇ₓ)Ω) + λP(Ω)(∇ₓρ + ρ∇ₓV) = 0,
