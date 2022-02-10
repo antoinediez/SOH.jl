@@ -137,7 +137,7 @@ In the example script, the density is initially uniform and the velocities are u
 
 ## Benchmark
 
-On a grid of size $400\times400$, one iteration takes less than 0.1 seconds of CPU time on an Intel MacBook Pro (2GHz Intel Core i5 processor with 8GB of memory). With this configuration, it takes about 15 minutes to run the example script. It is slighlty more performant (about 50% faster) than the Fortran implementation. It is comparable to the simulation time of a system of 100k particules on a CPU or with several millions of particles on a GPU, both using the high-performance [SiSyPHE](https://github.com/antoinediez/Sisyphe) library. 
+On a grid of size 400x400, one iteration takes less than 0.1 seconds of CPU time on an Intel MacBook Pro (2GHz Intel Core i5 processor with 8GB of memory). With this configuration, it takes about 15 minutes to run the example script. It is slighlty more performant (about 50% faster) than the Fortran implementation. It is comparable to the simulation time of a system of 100k particules on a CPU or with several millions of particles on a GPU, both using the high-performance [SiSyPHE](https://github.com/antoinediez/Sisyphe) library. 
 
 **Note:** currently, a significant computational time is necessary to save plots or to produce a video. Better performances (about two times faster) are achieved when no plots are generated. 
 
