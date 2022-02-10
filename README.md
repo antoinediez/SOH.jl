@@ -38,15 +38,7 @@ The SOH partial differential equations system reads
 
 ∂ₜ ρ + c₁∇ₓ⋅(ρΩ) = 0
 
-ρ(∂ₜ Ω + c₂(Ω⋅∇ₓ)Ω) + λP(Ω)(∇ₓρ + ρ∇ₓV) = 0
-
-$$
-\begin{align*}
-&\partial_t \rho + c_1\nabla_x\cdot(\rho\Omega) = 0 \\
-
-&\rho(\partial_t \Omega + c_2(\Omega\cdot\nabla_x)\Omega) + \lambda(P_{\Omega^\perp}\nabla_x\rho + \rho\nabla_x V) = 0,
-\end{align*}
-$$
+ρ(∂ₜ Ω + c₂(Ω⋅∇ₓ)Ω) + λP(Ω)(∇ₓρ + ρ∇ₓV) = 0,
 
 where $\rho\equiv\rho(t,x)$ represents the density of particles and $\Omega \equiv \Omega(t,x)$ is the velocity field at time $t$ and at a position $x$. The constant speed constraint is preserved thanks to the operator $P_{\Omega^\perp} = \mathrm{Id} - \Omega\otimes\Omega$ which is the projection operator on the orthogonal of the vector $\Omega$. It ensures that, for all $(t,x)$, 
 
