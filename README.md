@@ -37,58 +37,50 @@ and further developed in [1]. This model is based on an alignment mechanism whic
 The SOH partial differential equations system reads 
 
 <div align=center>
-<h style="font-size:48px">
 ∂ₜρ + c₁∇ₓ⋅(ρΩ) = 0           
 
 ρ(∂ₜΩ + c₂(Ω⋅∇ₓ)Ω) + λP(Ω)(∇ₓρ + ρ∇ₓV) = 0,
-</h>
 </div>
 
-where $\rho\equiv\rho(t,x)$ represents the density of particles and $\Omega \equiv \Omega(t,x)$ is the velocity field at time $t$ and at a position $x$. The constant speed constraint is preserved thanks to the operator $P_{\Omega^\perp} = \mathrm{Id} - \Omega\otimes\Omega$ which is the projection operator on the orthogonal of the vector $\Omega$. It ensures that, for all $(t,x)$, 
+where ρ≡ρ(t,x) represents the density of particles and Ω≡Ω(t,x) is the velocity field at time t and at a position x∈R². The constant speed constraint is preserved thanks to the operator P(Ω) = Id - Ω⊗Ω which is the projection operator on the orthogonal of the vector Ω. It ensures that, for all (t,x), 
 
-$$|\Omega(t,x)|=1,$$
+<div align=center>
+|Ω(t,x)| = 1,
+</div>
 
 provided that it holds at initial time. 
 
-The coefficient $c_1,c_2$ and $\lambda$ are given in [1] by
-
-$$
-\begin{align*}
-c_1 &= \int_0^\pi \cos\theta \, M(\theta)\,\mathrm{d}\theta, \\
-c_2 &= \frac{\int_0^\pi \cos\theta\,\sin\theta\,g(\theta)\,M(\theta)\,\mathrm{d}\theta}{\int_0^\pi \sin\theta\,g(\theta)\,M(\theta)\,\mathrm{d}\theta},\\
-\lambda &= \frac{1}{\kappa}, \\
-M(\theta) &= \frac{\mathrm{exp}(\kappa\cos\theta)}{\int_0^\pi \mathrm{exp}(\kappa\cos\theta')\,\mathrm{d}\theta}.
-\end{align*}
-$$
-
-The parameter $\kappa>0$ is a concentration parameter which defines the strength of the alignment between the particles and $g(\theta)$ is a so-called *Generalized-Collision Invariant* whose expression can be found in [1,2]. The case $g(\theta)=1$ corresponds to a different alignment mechanism introduced in 
+The coefficients c₁, c₂ and λ are generic nonnegative constants. In [1,2], they are obtained as functions of a concentration parameter κ which defines the strength of the alignment between the particles. Different functions can be obtained with a different alignment mechanism, for instance the one introduced in 
 
 [4] G. Dimarco, S. Motsch, *Self-alignment driven by jump processes: Macroscopic limit and numerical investigation*, Math. Models Methods Appl. Sci., Vol. 26, No. 7, pp. 1385–1410, (2016). 
+
+In all cases, the coefficients typically satisfy c₁>c₂ and λ = 1/κ.
 
 
 ## Numerical method
 
-The implementation is based on the methodology introduced by [2]. When $V=0$, the SOH model is shown to be the formal relaxation limit $\varepsilon\to0$ of a conservative system:
+The implementation is based on the methodology introduced by [2]. When V=0, the SOH model is shown to be the formal relaxation limit ɛ → 0 of a conservative system:
 
-$$
-\begin{align*}
-&\partial_t\rho^\varepsilon + c_1\nabla_x\cdot(\rho^\varepsilon\Omega^\varepsilon) = 0\\
-& \partial_t(\rho^\varepsilon\Omega^\varepsilon) + c_2\nabla_x\cdot(\rho^\varepsilon\Omega^\varepsilon\otimes \Omega^\varepsilon) + \lambda\nabla_x\rho^\varepsilon = \frac{\rho^\varepsilon}{\varepsilon}\big(1-|\Omega^\varepsilon|^2\big)\Omega^\varepsilon.
-\end{align*}
-$$
+<div align=center>
+∂ₜρ + c₁∇ₓ⋅(ρΩ) = 0            
+
+ɛ(∂ₜ(ρΩ) + c₂∇_x⋅(ρΩ⊗Ω) + λ∇ₓρ) = ρ(1-|Ω|²)Ω,
+</div>
+
 
 Following this idea, the Finite Volume scheme is based on a splitting method described by the following steps: 
 
 1. Solve the conservative part 
 
-$$
-\begin{align*}
-&\partial_t\rho + c_1\nabla_x\cdot(\rho\Omega) = 0\\
-& \partial_t(\rho\Omega) + c_2\nabla_x\cdot(\rho\Omega\otimes \Omega) + \lambda\nabla_x\rho = 0,
-\end{align*}
-$$
+<div align=center>
+∂ₜρ + c₁∇ₓ⋅(ρΩ) = 0       
 
-which is a classical 2D Euler system (with coeffcients $c_1\ne c_2$). Using a dimensional splitting method as described in Section 19.5 of 
+∂ₜ(ρΩ) + c₂∇_x⋅(ρΩ⊗Ω) + λ∇ₓρ = 0,
+</div>
+
+
+
+which is a classical 2D Euler system (with coeffcients c₁≠c₂). Using a dimensional splitting method as described in Section 19.5 of 
 
 [5] R. J. LeVeque, *Finite volume methods for hyperbolic problems*, Cambridge university press, 2004, ISBN 0-511-04219-1, 
 
@@ -98,31 +90,34 @@ this reduces to solving two 1D Euler systems. The present package implements a R
 
 2. The relaxation part reduces to 
 
-$$
-\begin{align*}
-&\partial_t\rho = 0\\
-& \partial_t(\rho\Omega) = \frac{\rho}{\varepsilon}\big(1-|\Omega|^2\big)\Omega.
-\end{align*}
-$$
+<div align=center>
+∂ₜρ = 0      
 
-It can be solved explicitly $|\Omega|^2 = (1+C_0\mathrm{e}^{-2/\varepsilon t})^{-1}$ with $C_0 = (\frac{1}{|\Omega_0|^2}-1)$. Numerically, taking the limit $\varepsilon\to0$ yields to a mere normalization 
+ɛ∂ₜ(ρΩ) = ρ(1-|Ω|²)Ω,
+</div>
 
-$$\Omega^{n+1} = \frac{\Omega^n}{|\Omega^n|}.$$
+It can be solved explicitly |Ω|² = 1/(1+C₀exp(-2/ɛt)) with C₀ = (1/|Ω₀|²-1). Numerically, taking the limit ɛ → 0 yields to a mere normalization 
+
+<div align=center>
+Ω ← Ω/|Ω|
+</div>
 
 3. Using again a fractional splitting [5, Section 17.1], the source terms reduces to 
 
-$$
-\begin{align*}
-&\partial_t\rho = 0\\
-& \partial_t\Omega = \lambda P_{\Omega^\perp} F, \quad F = -\nabla_x V.
-\end{align*}
-$$
+<div align=center>
+∂ₜρ = 0        
 
-This part can also be solved explitly in dimension 2, namely $\Omega(t) = (\cos\theta,\sin\theta)^\mathrm{T}$ where 
+∂ₜΩ = λP(Ω)F,  F=-∇ₓV
+</div>
 
-$$\theta = \psi + 2\,\mathrm{atan}(C_0\mathrm{e}^{-\lambda|F|t}),$$
 
-where $F = |F|(\cos\psi,\sin\psi)^{\mathrm{T}}$ and $C_0 = \tan(\frac{\theta_0-\psi}{2})$. 
+This part can also be solved explitly in dimension 2, namely Ω(t) = (cos(θ),sin(θ))ᵀ where 
+
+<div align=center>
+θ = ψ + 2 atan( C₀exp(-λ|F|t) )
+</div>
+
+where F = |F|(cos(ψ),sin(ψ))ᵀ and C₀ = tan((θ₀-ψ)/2). 
 
 Finally, at each step, the boundary conditions are treated using the ghost cells method described in [5, Chapter 7]. The boundary conditions currently implemented are periodic, Neumann and reflecting boundary conditions. 
 
@@ -136,7 +131,7 @@ include("example.jl)
 
 This script defines some simulation parameters and runs the main function `run!` (defined in the script `run.jl`). In addition to running the simulation, this function also creates a new directory in the current directory and save at least the initial and final data and possibly the plots or a video. All the plots and videos are produced using the [Makie.jl](https://makie.juliaplots.org/stable/) package. The data are saved using the [JLD2](https://github.com/JuliaIO/JLD2.jl) package.  
 
-In the example script, the density is initially uniform and the velocities are uniformly randomly sampled. The system is subject to reflecting boundary conditions and to a confining radial potential in a disk, namely the potential is $V(r) = 0$ for $r<r_0$ and $V(r) = \frac{C}{2}(r-r_0)^2$ for $r>r_0$. It leads to a final steady milling behavior, see for instance 
+In the example script, the density is initially uniform and the velocities are uniformly randomly sampled. The system is subject to reflecting boundary conditions and to a confining radial potential in a disk, namely the potential is V(r) = 0 for r<r₀ and V(r) = (C/2)(r-r₀)² for r>r₀. It leads to a final steady milling behavior, see for instance 
 
 [7] P. Degond, H. Yu, *Self-organized hydrodynamics in an annular domain: Modal analysis and nonlinear effects*, Math. Models Methods Appl. Sci., Vol. 25, No. 3, pp. 495–519, (2015).
 
