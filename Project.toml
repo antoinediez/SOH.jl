@@ -1,0 +1,4 @@
+name = "SOH"
+uuid = "334b9e08-ccd1-46f4-945f-bd1e0a39677b"
+authors = ["Antoine Diez <antoine.n.diez@gmail.com>"]
+version = "0.1.0"
