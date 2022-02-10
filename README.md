@@ -131,7 +131,11 @@ include("example.jl)
 
 This script defines some simulation parameters and runs the main function `run!` (defined in the script `run.jl`). In addition to running the simulation, this function also creates a new directory in the current directory and save at least the initial and final data and possibly the plots or a video. All the plots and videos are produced using the [Makie.jl](https://makie.juliaplots.org/stable/) package. The data are saved using the [JLD2](https://github.com/JuliaIO/JLD2.jl) package.  
 
-In the example script, the density is initially uniform and the velocities are uniformly randomly sampled. The system is subject to reflecting boundary conditions and to a confining radial potential in a disk, namely the potential is V(r) = 0 for r<r₀ and V(r) = (C/2)(r-r₀)² for r>r₀. It leads to a final steady milling behavior, see for instance 
+In the example script, the density is initially uniform and the velocities are uniformly randomly sampled. The system is subject to reflecting boundary conditions and to a confining radial potential in a disk, namely the potential is V(r) = 0 for r<r₀ and V(r) = (C/2)(r-r₀)² for r>r₀. It leads to a final steady milling behavior
+
+https://user-images.githubusercontent.com/70896255/153493145-67097126-63c1-47dc-8619-af7e2637e10d.mp4
+
+For analytical results in this direction, see for instance 
 
 [7] P. Degond, H. Yu, *Self-organized hydrodynamics in an annular domain: Modal analysis and nonlinear effects*, Math. Models Methods Appl. Sci., Vol. 25, No. 3, pp. 495–519, (2015).
 
