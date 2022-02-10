@@ -32,9 +32,9 @@ The SOH model is a continuum version of the interacting particle system, origina
 
 [3] T. Vicsek, A. Czirók, E. Ben-Jacob, I. Cohen, O. Shochet, *Novel type of phase transition in a system of self-driven particles*. Phys. Rev. Letr., Vol. 7, No. 6, pp. 1226, (1995),
 
-and further developed in [1]. This model is based on an alignment mechanism which tends the relax the direction of motion of each particle towards the average direction of motion of its neighbours. The particles are assumed to be self-propelled and to move at a constant speed which is a specificity of the Vicsek mdel. 
+and further developed in [1]. This swarming model is based on an alignment mechanism which tends to relax the direction of motion of each particle towards the average direction of motion of its neighbours. The particles are assumed to be self-propelled and to move at a constant speed, which is a specificity of the Vicsek model. 
 
-The SOH partial differential equations system reads 
+The SOH system reads 
 
 <div align=center>
 ∂ₜρ + c₁∇ₓ⋅(ρΩ) = 0           
@@ -50,7 +50,7 @@ where ρ≡ρ(t,x) represents the density of particles and Ω≡Ω(t,x) is the v
 
 provided that it holds at initial time. 
 
-The coefficients c₁, c₂ and λ are generic nonnegative constants. In [1,2], they are obtained as functions of a concentration parameter κ which defines the strength of the alignment between the particles. Different functions can be obtained with a different alignment mechanism, for instance the one introduced in 
+The coefficients c₁, c₂ and λ are generic nonnegative constants. In [1,2], they are obtained as functions of a concentration parameter κ which defines the strength of the alignment between the particles. Different functions can be obtained with a different alignment mechanism, see for instance the one introduced in 
 
 [4] G. Dimarco, S. Motsch, *Self-alignment driven by jump processes: Macroscopic limit and numerical investigation*, Math. Models Methods Appl. Sci., Vol. 26, No. 7, pp. 1385–1410, (2016). 
 
@@ -67,8 +67,7 @@ The implementation is based on the methodology introduced by [2]. When V=0, the 
 ɛ(∂ₜ(ρΩ) + c₂∇ₓ⋅(ρΩ⊗Ω) + λ∇ₓρ) = ρ(1-|Ω|²)Ω,
 </div>
 
-
-Following this idea, the Finite Volume scheme is based on a splitting method described by the following steps: 
+Following this idea, the finite volume scheme is based on a splitting method described by the following steps.
 
 1. Solve the conservative part 
 
@@ -78,17 +77,15 @@ Following this idea, the Finite Volume scheme is based on a splitting method des
 ∂ₜ(ρΩ) + c₂∇_x⋅(ρΩ⊗Ω) + λ∇ₓρ = 0,
 </div>
 
-
-
-which is a classical 2D Euler system (with coeffcients c₁≠c₂). Using a dimensional splitting method as described in Section 19.5 of 
+which is a classical 2D Euler system (with coefficients c₁≠c₂). Using a dimensional splitting method as described in Section 19.5 of 
 
 [5] R. J. LeVeque, *Finite volume methods for hyperbolic problems*, Cambridge university press, 2004, ISBN 0-511-04219-1, 
 
-this reduces to solving two 1D Euler systems. The present package implements a Roe scheme as in the package [Vicsek_macro](https://github.com/smotsch/Vicsek_macro) as well as a more stable positivity preserving HLLE scheme described in [5, Section 15.3.7] and introduced in 
+this reduces to solving two 1D Euler systems. For this system, the present package implements a classical Roe scheme (as in the package [Vicsek_macro](https://github.com/smotsch/Vicsek_macro)) as well as a more stable positivity preserving HLLE scheme described in [5, Section 15.3.7] and introduced in 
 
 [6] B. Einfeldt, C. D. Munz, P. L. Roe, B. Sjögreen, *On Godunov-type methods near low densities*, J. Comput. Phys., Vol. 92, No.2, pp. 273-295, (1991).
 
-2. The relaxation part reduces to 
+2. The relaxation part reads 
 
 <div align=center>
 ∂ₜρ = 0      
@@ -102,14 +99,13 @@ It can be solved explicitly |Ω|² = 1/(1+C₀exp(-2/ɛt)) with C₀ = (1/|Ω₀
 Ω ← Ω/|Ω|
 </div>
 
-3. Using again a fractional splitting [5, Section 17.1], the source terms reduces to 
+3. Using again a fractional splitting [5, Section 17.1], the source terms reads
 
 <div align=center>
 ∂ₜρ = 0        
 
 ∂ₜΩ = λP(Ω)F,  F=-∇ₓV
 </div>
-
 
 This part can also be solved explitly in dimension 2, namely Ω(t) = (cos(θ),sin(θ))ᵀ where 
 
@@ -119,7 +115,7 @@ This part can also be solved explitly in dimension 2, namely Ω(t) = (cos(θ),si
 
 where F = |F|(cos(ψ),sin(ψ))ᵀ and C₀ = tan((θ₀-ψ)/2). 
 
-Finally, at each step, the boundary conditions are treated using the ghost cells method described in [5, Chapter 7]. The boundary conditions currently implemented are periodic, Neumann and reflecting boundary conditions. 
+Finally, at each step, the boundary conditions are treated using the ghost-cell method described in [5, Chapter 7]. The boundary conditions currently implemented are either periodic, Neumann or reflecting boundary conditions. 
 
 ## Example 
 
@@ -129,9 +125,9 @@ The typical workflow to run a simulation is described in the example script ``ex
 include("example.jl)
 ```
 
-This script defines some simulation parameters and runs the main function `run!` (defined in the script `run.jl`). In addition to running the simulation, this function also creates a new directory in the current directory and save at least the initial and final data and possibly the plots or a video. All the plots and videos are produced using the [Makie.jl](https://makie.juliaplots.org/stable/) package. The data are saved using the [JLD2](https://github.com/JuliaIO/JLD2.jl) package.  
+This script defines some simulation parameters and runs the main function `run!` (defined in the script `run.jl`). In addition to running the simulation, this function also creates a new directory in the current path and save the data, heatmap plots and a video. All the plots and videos are produced using the [Makie.jl](https://makie.juliaplots.org/stable/) package. The data are saved using the [JLD2](https://github.com/JuliaIO/JLD2.jl) package.  
 
-In the example script, the density is initially uniform and the velocities are uniformly randomly sampled. The system is subject to reflecting boundary conditions and to a confining radial potential in a disk, namely the potential is V(r) = 0 for r<r₀ and V(r) = (C/2)(r-r₀)² for r>r₀. It leads to a final steady milling behavior
+In the example script, the density is initially uniform and the velocities are uniformly randomly sampled. The system is subject to reflecting boundary conditions and to a confining radial potential in a disk, namely the potential is given by V(r) = 0 for r<r₀ and V(r) = (C/2)(r-r₀)² for r>r₀. It leads to a final milling state as shown in the following video. 
 
 https://user-images.githubusercontent.com/70896255/153493145-67097126-63c1-47dc-8619-af7e2637e10d.mp4
 
@@ -143,9 +139,9 @@ For analytical results in this direction, see for instance
 
 ## Benchmark
 
-On a grid of size 400x400, one iteration takes less than 0.1 seconds of CPU time on an Intel MacBook Pro (2GHz Intel Core i5 processor with 8GB of memory). With this configuration, it takes about 15 minutes to run the example script. It is slighlty more performant (about 50% faster) than the Fortran implementation. It is comparable to the simulation time of a system of 100k particules on a CPU or with several millions of particles on a GPU, both using the high-performance [SiSyPHE](https://github.com/antoinediez/Sisyphe) library. 
+On a grid of size 400x400, one iteration takes less than 0.1 seconds of CPU time on an Intel MacBook Pro (2GHz Intel Core i5 processor with 8GB of memory). With this configuration, it takes about 15 minutes to run the example script. It is slighlty more performant (about 50% faster) than the Fortran implementation. The simulation time is comparable to the one needed to simulate of a system of 100k particules on a CPU or of several millions of particles on a GPU, both using the high-performance [SiSyPHE](https://github.com/antoinediez/Sisyphe) library. 
 
-**Note:** currently, a significant computational time is necessary to save plots or to produce a video. Better performances (about two times faster) are achieved when no plots are generated. 
+**Note:** currently, a significant computational time is necessary to save plots or to produce a video. The simulation is about two times faster when no plots are generated. 
 
 
 
