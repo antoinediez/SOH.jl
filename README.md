@@ -36,9 +36,13 @@ and further developed in [1]. This model is based on an alignment mechanism whic
 
 The SOH partial differential equations system reads 
 
-∂ₜ ρ + c₁∇ₓ⋅(ρΩ) = 0
+<div align=center>
+<h style="font-size:18px">
+∂ₜρ + c₁∇ₓ⋅(ρΩ) = 0           
 
-ρ(∂ₜ Ω + c₂(Ω⋅∇ₓ)Ω) + λP(Ω)(∇ₓρ + ρ∇ₓV) = 0,
+ρ(∂ₜΩ + c₂(Ω⋅∇ₓ)Ω) + λP(Ω)(∇ₓρ + ρ∇ₓV) = 0,
+</h>
+</div>
 
 where $\rho\equiv\rho(t,x)$ represents the density of particles and $\Omega \equiv \Omega(t,x)$ is the velocity field at time $t$ and at a position $x$. The constant speed constraint is preserved thanks to the operator $P_{\Omega^\perp} = \mathrm{Id} - \Omega\otimes\Omega$ which is the projection operator on the orthogonal of the vector $\Omega$. It ensures that, for all $(t,x)$, 
 
