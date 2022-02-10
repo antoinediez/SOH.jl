@@ -133,7 +133,9 @@ This script defines some simulation parameters and runs the main function `run!`
 
 In the example script, the density is initially uniform and the velocities are uniformly randomly sampled. The system is subject to reflecting boundary conditions and to a confining radial potential in a disk, namely the potential is V(r) = 0 for r<r₀ and V(r) = (C/2)(r-r₀)² for r>r₀. It leads to a final steady milling behavior
 
+<p align="center">
 https://user-images.githubusercontent.com/70896255/153493145-67097126-63c1-47dc-8619-af7e2637e10d.mp4
+</p>
 
 For analytical results in this direction, see for instance 
 
