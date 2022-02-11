@@ -122,7 +122,7 @@ Finally, at each step, the boundary conditions are treated using the ghost-cell 
 The typical workflow to run a simulation is described in the example script ``example.jl`` which can be launched by typing 
 
 ```julia
-include("example.jl)
+include("example.jl")
 ```
 
 This script defines some simulation parameters and runs the main function `run!` (defined in the script `run.jl`). In addition to running the simulation, this function also creates a new directory in the current path and save the data, heatmap plots and a video. All the plots and videos are produced using the [Makie.jl](https://makie.juliaplots.org/stable/) package. The data are saved using the [JLD2](https://github.com/JuliaIO/JLD2.jl) package.  
