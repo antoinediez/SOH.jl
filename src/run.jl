@@ -175,11 +175,15 @@ function run!(
     #============ The big loop =============================================================#
     #=======================================================================================#
 
+    flux_ρ = zeros(ncellx + 1, ncelly + 1)
+    flux_u = zeros(ncellx + 1, ncelly + 1)
+    flux_v = zeros(ncellx + 1, ncelly + 1)
+
     println("Run the simulation...\n")
     ntime = floor(Int, final_time / Δt)
     p = Progress(ntime)
     for itime in 1:ntime
-        scheme_iter!(ρ,u,v,Δx,Δy,Δt,c1,c2,λ,bcond_x,bcond_y,Fx,Fy,method)
+        scheme_iter!(ρ,u,v,Δx,Δy,Δt,c1,c2,λ,bcond_x,bcond_y,Fx,Fy,flux_ρ,flux_u,flux_v,method)
         if should_save
             if itime%save_step == 0
                 save_data!(data,ρ,u,v,data_dir,"data_$itime.jld2",key="iter_$itime")

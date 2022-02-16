@@ -41,6 +41,7 @@ function scheme_iter!(
     c1,c2,λ,
     bcond_x,bcond_y,
     Fx,Fy,
+    flux_ρ, flux_u, flux_v,
     method
 )
     ncellx = size(ρ)[1] - 2
@@ -62,9 +63,6 @@ function scheme_iter!(
 
     #----------------------- 1. Compute the flux -----------------------------------#
 
-    flux_ρ = zeros(ncellx + 1, ncelly)
-    flux_u = zeros(ncellx + 1, ncelly)
-    flux_v = zeros(ncellx + 1, ncelly)
     @inbounds for j in 1:ncelly
         @simd for i in 1:(ncellx+1)
             F = flux_x(
@@ -129,9 +127,6 @@ function scheme_iter!(
     # Note: Change basis (u,v) -> (v,-u) in order to use the same function `flux_x`
     #-------------------------------------------------------------------------------#
 
-    flux_ρ = zeros(ncellx, ncelly + 1)
-    flux_u = zeros(ncellx, ncelly + 1)
-    flux_v = zeros(ncellx, ncelly + 1)
     @inbounds for j in 1:(ncelly+1)
         @simd for i in 1:ncellx
             F = flux_x(
@@ -215,8 +210,8 @@ with C_0 = tan((θ(0)-ψ)/2) and F = |F|(cos(ψ),sin(ψ))ᵀ.
 function scheme_potential!(u,v,Fx,Fy,Δt,λ)
     ncellx = size(u)[1] - 2
     ncelly = size(u)[2] - 2
-    for i in 2:ncellx+1
-        for j in 2:ncelly+1
+    @inbounds for j in 2:ncelly+1
+        for i in 2:ncellx+1
             normF = sqrt(Fx[i,j]^2 + Fy[i,j]^2)
             if normF > 1e-9
                 θ0 = atan(v[i,j],u[i,j])
