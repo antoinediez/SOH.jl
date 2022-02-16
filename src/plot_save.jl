@@ -1,25 +1,23 @@
-module PlotSave
 using CairoMakie, ProgressMeter, Statistics
-export plot_rhoUV, update_plot!, save_data!, radial_density
 
 """
     plot_rhoUV(
         ρ,u,v,
         Δx,Δy,
         range,
-        save_plot=true,save_video=false,dir_name=pwd(),file_name="0.png"; 
+        save_plot=true,save_video=false,dir_name=pwd(),file_name="0.png";
         theme="dark", resolution=(800,600),arrow_step=20,fps=40,kwargs...
     )
 
 Return the figure, axes, heatmap and arrows associated to the density `ρ` and velocity field
-`(u,v)`. The plot is saved in the directory `dir_name` in the file `file_name`. Two themes 
-are available, either `"dark"` (default) or `"light"`. 
+`(u,v)`. The plot is saved in the directory `dir_name` in the file `file_name`. Two themes
+are available, either `"dark"` (default) or `"light"`.
 """
 function plot_rhoUV(
     ρ,u,v,
     Δx,Δy,
     range,
-    save_plot=true,save_video=false,dir_name=pwd(),file_name="0.png"; 
+    save_plot=true,save_video=false,dir_name=pwd(),file_name="0.png";
     theme="dark", resolution=(800,600),arrow_step=20,fps=40,kwargs...
 )
     if theme == "dark"
@@ -76,7 +74,7 @@ end
 """
     update_plot!(fig,ax,hm,arrows,ρ,u,v,title,dir_name,file_name,save_plot=true,stream=nothing)
 
-Update a plot created with the function `plot_rhoUV` and save it. 
+Update a plot created with the function `plot_rhoUV` and save it.
 """
 function update_plot!(fig,ax,hm,arrows,ρ,u,v,title,dir_name,file_name,save_plot=true,stream=nothing)
     ncellx = size(ρ)[1] - 2
@@ -105,7 +103,7 @@ end
         ρ,u,v,
         dir_name,file_name;key="data")
 
-Update the dictionary `data` with the values `(ρ,u,v)` and save it. 
+Update the dictionary `data` with the values `(ρ,u,v)` and save it.
 """
 function save_data!(
     data,
@@ -120,9 +118,9 @@ end
 """
     radial_density(ρ,Δx,Δy,K=400)
 
-Compute the radial density as the mean of `ρ` in `K` annuli of 
-equal lengths and evenly spread radii between 0 and the maximal 
-radius in the box. Return the vector of radii and the radial density. 
+Compute the radial density as the mean of `ρ` in `K` annuli of
+equal lengths and evenly spread radii between 0 and the maximal
+radius in the box. Return the vector of radii and the radial density.
 """
 function radial_density(ρ,Δx,Δy,K=400)
     ncellx = size(ρ)[1] - 2
@@ -150,6 +148,3 @@ function radial_density(ρ,Δx,Δy,K=400)
     end
     return r, rho_r
 end
-
-end    #module
-

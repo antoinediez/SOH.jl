@@ -1,9 +1,3 @@
-module Init
-export random_init, quadratic_potential_force, flat_quadratic_potential_force
-
-include("boundary_conditions.jl")
-using .BoundaryConditions
-
 """
     random_init(
         ncellx,ncelly,
@@ -14,8 +8,8 @@ using .BoundaryConditions
 
 Sample a random data `(ρ,u,v)` of size `(ncellx+2)*(ncelly+2)`. The density `ρ` is sampled
 uniformly around `mean_ρ` in an interval of size `range_ρ`. The velocity component `u` and
-`v` are respectively given by `cos(θ)` and `sin(θ)` where `θ` is sampled uniformly around 
-`mean_θ` in an interval of size `range_θ`. Boundary conditions are then applied. 
+`v` are respectively given by `cos(θ)` and `sin(θ)` where `θ` is sampled uniformly around
+`mean_θ` in an interval of size `range_θ`. Boundary conditions are then applied.
 """
 function random_init(
     ncellx,ncelly,
@@ -34,10 +28,10 @@ end
 """
     quadratic_potential_force(ncellx,ncelly,Δx,Δy,C)
 
-Return the components `Fx` and `Fy` of the force exerted by the quadratic radial 
+Return the components `Fx` and `Fy` of the force exerted by the quadratic radial
 potential V(r) = Cr²/2 centered around the midpoint of the box `[0,Lx]*[0,Ly]`
 where `Lx = ncellx * Δx` and `Ly = ncelly * Δy`. For convenience, the outputs `Fx` and `Fy` are
-matrices of size `(ncellx+2)*(ncelly+2)` with zeros on the boundary. 
+matrices of size `(ncellx+2)*(ncelly+2)` with zeros on the boundary.
 """
 function quadratic_potential_force(ncellx,ncelly,Δx,Δy,C)
     Fx = zeros(ncellx+2,ncelly+2)
@@ -59,11 +53,11 @@ end
 """
     flat_quadratic_potential_force(ncellx,ncelly,Δx,Δy,r0,C)
 
-Return the components `Fx` and `Fy` of the force exerted by the quadratic radial 
+Return the components `Fx` and `Fy` of the force exerted by the quadratic radial
 potential defined by V(r) = Cr²/2 for r>r0 and V(r)=0 otherwise,
-centered around the midpoint of the box `[0,Lx]*[0,Ly]` where `Lx = ncellx * Δx` 
+centered around the midpoint of the box `[0,Lx]*[0,Ly]` where `Lx = ncellx * Δx`
 and `Ly = ncelly * Δy`. For convenience, the outputs `Fx` and `Fy` are
-matrices of size `(ncellx+2)*(ncelly+2)` with zeros on the boundary. 
+matrices of size `(ncellx+2)*(ncelly+2)` with zeros on the boundary.
 """
 function flat_quadratic_potential_force(ncellx,ncelly,Δx,Δy,r0,C)
     Fx = zeros(ncellx+2,ncelly+2)
@@ -84,6 +78,4 @@ function flat_quadratic_potential_force(ncellx,ncelly,Δx,Δy,r0,C)
         end
     end
     return Fx, Fy
-end
-
 end
