@@ -65,8 +65,8 @@ function scheme_iter!(
     flux_ρ = zeros(ncellx + 1, ncelly)
     flux_u = zeros(ncellx + 1, ncelly)
     flux_v = zeros(ncellx + 1, ncelly)
-    for i in 1:(ncellx+1)
-        for j in 1:ncelly
+    @inbounds for j in 1:ncelly
+        @simd for i in 1:(ncellx+1)
             F = flux_x(
                 ρ[i,j+1],ρ[i+1,j+1],
                 u[i,j+1],u[i+1,j+1],
@@ -81,8 +81,8 @@ function scheme_iter!(
 
     #----------------------- Update ------------------------------------------------#
 
-    for i in 2:(ncellx+1)
-        for j in 2:(ncelly+1)
+    @inbounds for j in 2:(ncelly+1)
+        for i in 2:(ncellx+1)
 
             #------ 2. Conservative part -------------------------------------------#
             U = (ρ[i,j] - (Δt/Δx) * (flux_ρ[i, j-1] - flux_ρ[i-1, j-1]),
@@ -132,8 +132,8 @@ function scheme_iter!(
     flux_ρ = zeros(ncellx, ncelly + 1)
     flux_u = zeros(ncellx, ncelly + 1)
     flux_v = zeros(ncellx, ncelly + 1)
-    for i in 1:ncellx
-        for j in 1:(ncelly+1)
+    @inbounds for j in 1:(ncelly+1)
+        @simd for i in 1:ncellx
             F = flux_x(
                 ρ[i+1,j],ρ[i+1,j+1],
                 v[i+1,j],v[i+1,j+1],
@@ -147,8 +147,8 @@ function scheme_iter!(
     end
 
     #----------------------- Update ------------------------------------------------#
-    for i in 2:(ncellx+1)
-        for j in 2:(ncelly+1)
+    @inbounds for j in 2:(ncelly+1)
+        @simd for i in 2:(ncellx+1)
 
             #------ 2. Conservative part -------------------------------------------#
             U = (ρ[i,j] - (Δt/Δy) * (flux_ρ[i-1, j] - flux_ρ[i-1, j-1]),
