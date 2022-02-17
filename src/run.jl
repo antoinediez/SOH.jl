@@ -1,15 +1,4 @@
-"""Contains the main function to run a simulation."""
-module Run
-export run!
-
-include("scheme.jl")
-include("plot_save.jl")
-include("toolbox.jl")
 using JLD2, Dates, ProgressMeter
-using .Scheme
-using .PlotSave
-using .ToolBox
-
 """
     run!(
         ρ,u,v;
@@ -28,18 +17,18 @@ using .ToolBox
     )
 
 Run a simulation of the SOH system starting from the data `(ρ,u,v)`. The domain
-grid has the following structure. 
+grid has the following structure.
 
 ```
 |------- |----------------|---------------|----------------------|--------|
-| ghost  |    ghost       |       ...     |    ghost             | ghost  |     
+| ghost  |    ghost       |       ...     |    ghost             | ghost  |
 |--------║================|===============|======================║--------|
 | ghost  ║  (2,ncelly+1)  |      ...      | (ncellx+1,ncelly+1)  ║ ghost  |
 |--------║----------------|---------------|----------------------║--------|
 | ghost  ║  (2,ncelly)    |      ...      | (ncellx+1,ncelly)    ║ ghost  |
 |--------║----------------|---------------|----------------------║--------|
 |        ║                |               |                      ║        |
-|--------║----------------|---------------|----------------------║--------|   
+|--------║----------------|---------------|----------------------║--------|
 | ghost  ║    (2,3)       |      ...      |   (ncellx+1,3)       ║ ghost  |
 |--------║----------------|---------------|----------------------║--------|
 | ghost  ║    (2,2)       |      ...      |   (ncellx+1,2)       ║ ghost  |
@@ -47,8 +36,8 @@ grid has the following structure.
 | ghost  |    ghost       |      ...      |    ghost             | ghost  |
 |--------|----------------|---------------|----------------------|--------|
 ````
-  
-The ghost cells (first and last column and rows) are used for the boundary 
+
+The ghost cells (first and last column and rows) are used for the boundary
 conditions.
 
 # Arguments
@@ -57,11 +46,11 @@ conditions.
 - `v` -- y-coordinate of the velocity (matrix of size `ncellx*ncelly`)
 - `Lx` -- length of the domain along the x-axis
 - `Ly` -- length of the domain along the y-axis
-- `Δt` -- time-step 
+- `Δt` -- time-step
 - `c1` -- coefficient c1
 - `c2` -- coefficient c1
 - `λ` -- coefficient λ
-- `final_time` -- final time of the simulation 
+- `final_time` -- final time of the simulation
 - `bcond_x` -- (optional, default : `"periodic"`) boundary condition along the x-axis
 - `bcond_y` -- (optional, default : `"periodic"`) boundary condition along the y-axis
 - `Fx` -- (optional, default : `nothing`) if specified, x-coordinate of the exterior force
@@ -70,7 +59,7 @@ conditions.
 - `simu` -- (optional, default : `"simu"`) name of the simulation directory
 - `should_save` -- (optional, default : `false`) flag for saving the data (ρ,u,v)
 - `save_step` -- (optional, default : `1`) number of iterations between two saved data
-- `should_plot` -- (optional, default : `false`) flag for plotting and saving the heatmap 
+- `should_plot` -- (optional, default : `false`) flag for plotting and saving the heatmap
 - `plot_step` -- (optional, default : `1`) number of iterations between two saved plots
 - `save_video` -- (optional, default : `false`) flag for saving a video
 - `fps` -- (optional, default : `40`) frame per seconds
@@ -104,10 +93,10 @@ function run!(
         :Lx => Lx, :Ly => Ly, :ncellx => ncellx, :ncelly => ncelly,
         :Δx => Δx, :Δy => Δy, :Δt => Δt,
         :c1 => c1, :c2 => c2, :λ => λ, :CFL => c1 * Δt/Δx * sqrt(λ/(c1-c2)),
-        :final_time => final_time, 
-        :bcond_x => bcond_x, :bcond_y => bcond_y, 
-        :Fx => Fx, :Fy => Fy, 
-        :method => method, 
+        :final_time => final_time,
+        :bcond_x => bcond_x, :bcond_y => bcond_y,
+        :Fx => Fx, :Fy => Fy,
+        :method => method,
         :date => string(Dates.now())
     )
 
@@ -186,11 +175,15 @@ function run!(
     #============ The big loop =============================================================#
     #=======================================================================================#
 
+    flux_ρ = zeros(ncellx + 1, ncelly + 1)
+    flux_u = zeros(ncellx + 1, ncelly + 1)
+    flux_v = zeros(ncellx + 1, ncelly + 1)
+
     println("Run the simulation...\n")
     ntime = floor(Int, final_time / Δt)
     p = Progress(ntime)
     for itime in 1:ntime
-        scheme_iter!(ρ,u,v,Δx,Δy,Δt,c1,c2,λ,bcond_x,bcond_y,Fx,Fy,method)
+        scheme_iter!(ρ,u,v,Δx,Δy,Δt,c1,c2,λ,bcond_x,bcond_y,Fx,Fy,flux_ρ,flux_u,flux_v,method)
         if should_save
             if itime%save_step == 0
                 save_data!(data,ρ,u,v,data_dir,"data_$itime.jld2",key="iter_$itime")
@@ -205,7 +198,7 @@ function run!(
                     update_plot!(fig,ax,hm,arrows,ρ,u,v,"time=$round_time",plot_dir,"$itime.png")
                 end
             end
-        end   
+        end
         next!(p)
     end
 
@@ -230,6 +223,3 @@ function run!(
 
 
 end
-
-
-end    #module

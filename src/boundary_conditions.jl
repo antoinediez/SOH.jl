@@ -1,7 +1,3 @@
-"""Contains the functions to apply boundary conditions and define classical the exterior forces """
-module BoundaryConditions
-export boundary_conditions_xy!, boundary_conditions_ρuv!
-
 """
     boundary_conditions_x!(density,bcond_x)
 
@@ -25,7 +21,7 @@ function boundary_conditions_x!(density,bcond_x)
 end
 
 """
-    boundary_conditions_y!(density,bcond_y) 
+    boundary_conditions_y!(density,bcond_y)
 
 Apply the boundary conditions `bcond_y` on the y-axis of the matrix `density`.
 Currently, only the boundary conditions `"periodic"`, `"Neumann"` and `"reflecting"` are implemented.
@@ -49,7 +45,7 @@ end
     boundary_conditions_xy!(density,bcond_x,bcond_y)
 
 Apply successively the functions `boundary_conditions_x!` and `boundary_conditions_x!` to
-the matrix `density`. 
+the matrix `density`.
 """
 function boundary_conditions_xy!(density,bcond_x,bcond_y)
     boundary_conditions_x!(density,bcond_x)
@@ -59,7 +55,7 @@ end
 """
     boundary_conditions_ρuv!(ρ,u,v,bcond_x,bcond_y)
 
-Apply the boundary conditions to the data `(ρ,u,v)`. 
+Apply the boundary conditions to the data `(ρ,u,v)`.
 """
 function boundary_conditions_ρuv!(ρ,u,v,bcond_x,bcond_y)
     if bcond_x == "periodic" || bcond_x == "Neumann"
@@ -86,5 +82,3 @@ function boundary_conditions_ρuv!(ρ,u,v,bcond_x,bcond_y)
         ArgumentError("Boundary condition not defined!")
     end
 end
-
-end    #module

@@ -1,10 +1,8 @@
-module ToolBox
 using QuadGK, HCubature
-export make_new_dir, coefficients_Vicsek, nice_float2string
 
 """
-Create a new directory `dirname` in the current path. 
-Append a number to the name if the directory already exists. 
+Create a new directory `dirname` in the current path.
+Append a number to the name if the directory already exists.
 """
 function make_new_dir(dirname::String)
     if ispath(dirname)
@@ -33,8 +31,8 @@ end
 
 """
 Return the coefficients `c1,c2,λ` of the SOH model computed for the `model` `"Fokker-Planck"` (default)
-or `"BGK"` with the concentration parameters `κ`. 
-These coefficients are given by 
+or `"BGK"` with the concentration parameters `κ`.
+These coefficients are given by
 
 c₁ = ∫\\_[0,π] cos(θ)exp(κcos(θ))dθ / ∫\\_[0,π] exp(κcos(θ))dθ
 
@@ -42,13 +40,13 @@ c₂ = ∫\\_[0,π] cos(θ)sin(θ)g(θ)exp(κcos(θ))dθ / ∫\\_[0,π] sin(θ)g
 
 λ = 1/κ
 
-where 
+where
 
 g(θ) = θ/κ - π/κ * ∫\\_[0,θ] exp(-κcos(ψ))dψ / ∫\\_[0,π] exp(-κcos(ψ))dψ in the Fokker-Planck case
 
-and 
+and
 
-g(θ) = 1 in the BGK case. 
+g(θ) = 1 in the BGK case.
 """
 function coefficients_Vicsek(κ;model="Fokker-Planck")
     λ = 1/κ
@@ -62,10 +60,10 @@ function coefficients_Vicsek(κ;model="Fokker-Planck")
         return c1,c2,λ
     elseif model=="Fokker-Planck"
         Zinv = quadgk(θ->exp(-κ*cos(θ)),0,pi,rtol=1e-5)[1]
-        I21 = quadgk(θ->θ*cos(θ)*sin(θ)*exp(κ*cos(θ)),0,pi,rtol=1e-5)[1]/κ 
+        I21 = quadgk(θ->θ*cos(θ)*sin(θ)*exp(κ*cos(θ)),0,pi,rtol=1e-5)[1]/κ
         I22 = pi/(κ*Zinv) * hcubature(x->cos(x[1])*sin(x[1])*exp(κ*cos(x[1]))*exp(-κ*cos(x[2]))*(x[2]<x[1]),(0,0),(pi,pi),rtol=1e-3)[1]
         I2 = I21 - I22
-        Z21 = quadgk(θ->θ*sin(θ)*exp(κ*cos(θ)),0,pi,rtol=1e-5)[1]/κ 
+        Z21 = quadgk(θ->θ*sin(θ)*exp(κ*cos(θ)),0,pi,rtol=1e-5)[1]/κ
         Z22 = pi/(κ*Zinv) * hcubature(x->sin(x[1])*exp(κ*cos(x[1]))*exp(-κ*cos(x[2]))*(x[2]<x[1]),(0,0),(pi,pi),rtol=1e-3)[1]
         Z2 = Z21 - Z22
         c2 = I2/Z2
@@ -73,8 +71,4 @@ function coefficients_Vicsek(κ;model="Fokker-Planck")
     else
         ArgumentError("Model not defined!")
     end
-end
-
-
-
 end

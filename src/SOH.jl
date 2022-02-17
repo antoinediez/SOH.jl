@@ -7,14 +7,6 @@ include("run.jl")
 include("scheme.jl")
 include("toolbox.jl")
 
-using .BoundaryConditions
-using .Flux
-using .Init
-using .PlotSave
-using .Run
-using .Scheme
-using .ToolBox
-
 export boundary_conditions_xy!, boundary_conditions_ρuv!
 export flux_x
 export random_init, quadratic_potential_force, flat_quadratic_potential_force
@@ -25,4 +17,4 @@ export make_new_dir, coefficients_Vicsek, nice_float2string
 
 
 
-end     #module 
+end     #module
