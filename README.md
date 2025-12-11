@@ -4,6 +4,8 @@
 <img src="mill.png" alt="mill" width="200">
 </p>
 
+[![DOI](https://zenodo.org/badge/372611261.svg)](https://doi.org/10.5281/zenodo.5532923)
+
 
 This (small) package is a finite volume solver for the Self-Organized Hydrodynamics (SOH) partial differential equation system derived as the macroscopic limit of a Vicsek-like model by P. Degond and S. Motsch in 
 
